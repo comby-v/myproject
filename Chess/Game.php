@@ -10,6 +10,12 @@ class game
 
         
     }
+
+    public function play ()
+    {
+        $chessboard = ChessBoard::getInstance();
+        $_SESSION['chessboard'] = $chessboard;
+    }
 }
 
 

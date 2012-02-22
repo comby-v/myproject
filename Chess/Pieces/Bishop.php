@@ -4,7 +4,7 @@ class Bishop extends ChessPiece
 {
     public function __construct ($color)
     {
-        parent::__construct ($color, PieceType::BISHOP);
+        parent::__construct ($color, "bishop");
     }
 
     public function  __destruct()

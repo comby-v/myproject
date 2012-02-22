@@ -4,7 +4,7 @@ class Knight extends ChessPiece
 {
     public function __construct ($color)
     {
-      parent::__construct ($color, PieceType::KNIGHT);
+      parent::__construct ($color, "knight");
     }
 
     public function  __destruct()

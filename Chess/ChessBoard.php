@@ -2,39 +2,34 @@
 class ChessBoard
 {
 /*Singleton*/
- private static $_instance = null;
- private function __construct()
- {
+    private static $_instance = null;
+
+    private function __construct()
+    {
       $this->_chessboard = array ();
       $this->init_chessboard ();
- }
- public static function getInstance()
- {
+      
+    }
+
+    public static function getInstance()
+    {
      if (is_null (self::$_instance))
      {
          self::$_instance = new ChessBoard ();
      }
      return self::$_instance;
- }
+    }
 
- public function __get($name)
- {
+
+    public function __get($name)
+    {
     return $this->$name;
- }
- 
-   public function __toString ()
-   {
+    }
+
+    public function __toString ()
+    {
        return ($this->_chessboard);
-        /*$tab = array ();
-        for ($i = 0; $i < 8; $i++)
-        {
-         for ($j = 0; $j < 8; $j++)
-            {
-             $tab = $this->_chessboard[$i][$j]->$_kind;
-            }
-         }
-        return $tab;*/
-   }
+    }
 
 /*private function*/
  private function init_chessboard ()
@@ -44,11 +39,13 @@ class ChessBoard
         for ($j = 0; $j < 8; $j++)
         {
             $default_piece = new None;
-            $_chessboard[$i][$j] = $default_piece;
+            $this->_chessboard[$i][$j] = $default_piece;
         }
     }
     $this->init_chesspieces ();
+    
  }
+
 
 
  private function init_chesspieces ()
@@ -88,12 +85,14 @@ class ChessBoard
     $this->_chessboard[Position::FELIX][Position::ACHT] = new Bishop (Color::BLACK);
     $this->_chessboard[Position::GUSTAV][Position::ACHT] = new Knight (Color::BLACK);
     $this->_chessboard[Position::HECTOR][Position::ACHT] = new Rook (Color::BLACK);
+
  }
 
 
 
  /*private attributs*/
  private $_chessboard;
+ private $_test;
 }
 
 ?>

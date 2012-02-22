@@ -4,7 +4,7 @@ class Rook extends ChessPiece
 {
     public function __construct ($color)
     {
-       parent::__construct ($color, PieceType::ROOK);
+       parent::__construct ($color, "rook");
     }
 
     public function  __destruct()

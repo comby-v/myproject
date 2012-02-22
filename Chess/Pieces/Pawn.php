@@ -1,9 +1,10 @@
 <?php
+
 class Pawn extends ChessPiece
 {
     public function __construct ($color)
     {
-       parent::__construct ($color, PieceType::PAWN);
+       parent::__construct ($color, "pawn");
     }
 
     public function  __destruct()

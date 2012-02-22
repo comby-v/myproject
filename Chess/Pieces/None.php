@@ -5,7 +5,7 @@ class None extends ChessPiece
 {
     public function __construct ()
     {
-         parent::__construct (Color::WHITE, PieceType::KING);
+         parent::__construct (Color::WHITE, "none");
     }
 
     public function  __destruct()

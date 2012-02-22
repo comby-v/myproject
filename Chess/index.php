@@ -1,13 +1,13 @@
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
+<?php
+   session_start ();
+?>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title> My Chess Board</title>
-        <script src="canvas.js"> </script>
+        <script > </script>
     </head>
     <body>
         <?php
@@ -28,10 +28,9 @@ and open the template in the editor.
              require $class . '.php';
          }
 
-        $chessboard = ChessBoard::getInstance();
-        //echo "ok";
-        $tab = array ('citron', 'vanille', 'chocolat');
-        //echo ' var mychessboard = ' . json_encode($chessboard->_chessboard);
+        $game = new Game ();
+        $game->play ();
+
         
         ?>
         <canvas id="boardCanvas" width="800" height="800">
