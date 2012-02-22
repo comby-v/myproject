@@ -1,21 +1,27 @@
 <?php
 
-class game
+class Game
 {
-    private function display ()
+
+    public function __get($name)
     {
-        $html_page = "<canvas id=\"test_canvas\" width=\"500\" height=\"500\">";
-        $html_page .= 'You can\'t support Canvas';
-        $html_page .= "</canvas>";
-
-        
+        return $this->$name;
     }
-
+    
     public function play ()
     {
-        $chessboard = ChessBoard::getInstance();
-        $_SESSION['chessboard'] = $chessboard;
+        $this->_chessboard = ChessBoard::getInstance();
+        $this->_player = 0;
     }
+
+    public function switch_player ()
+    {
+        $this->_player = !$this->_player;
+    }
+
+    public $_chessboard;
+    public $_player;
+    public $_selection;
 }
 
 

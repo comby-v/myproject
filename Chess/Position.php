@@ -1,16 +1,19 @@
 <?php
-class Row
-{
-
-}
-
-class Column
-{
-
-}
 
 class Position
 {
+    public function __construct($i, $j)
+    {
+      $this->_rank = $j;
+      $this->_file = $i;
+    }
+
+
+    public function __get($name)
+    {
+        return $this->$name;
+    }
+
 //File
     const ANNA = 0;
     const BELLA = 1;

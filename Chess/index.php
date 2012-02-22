@@ -27,19 +27,18 @@
              }
              require $class . '.php';
          }
-
+         
         $game = new Game ();
+        $_SESSION['game'] = $game;
         $game->play ();
-
         
+
         ?>
         <canvas id="boardCanvas" width="800" height="800">
             Message pour les navigateurs ne supportant pas encore canvas.
         </canvas>
 
         <script src="Js/display.js" language="javascript" type="text/javascript">
-
-        
         </script>
     </body>
 </html>

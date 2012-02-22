@@ -18,33 +18,102 @@ session_start ();
      require $class . '.php';
  }
  
-header("Content-Type: text/xml"); // Utilisation d'un header pour spécifier le type de contenu de la page. Ici, il s'agit juste de texte brut (text/plain).
-echo '<?xml version="1.0" encoding="UTF-8" ?>';
+header("Content-Type: text/xml");
+
+$function = (isset($_GET["function"])) ? $_GET["function"] : NULL;
+if ($function == 'get_chessboard_xml')
+{
+    get_chessboard_xml ();
+}
+else if ($function == 'handle_action')
+{
+    $variable1 = (isset($_GET["i"])) ? $_GET["i"] : -1;
+    $variable2 = (isset($_GET["j"])) ? $_GET["j"] : -1;
+
+    if ($variable1 != -1 && $variable2 != -1)
+    {
+        handle_action($variable1, $variable2);
+    }
+}
+
 $variable1 = (isset($_GET["i"])) ? $_GET["i"] : NULL;
 $variable2 = (isset($_GET["j"])) ? $_GET["j"] : NULL;
 
-//echo "[" . $_GET["i"] . "]" . "[" . $_GET["j"] . "]";
+function get_chessboard_xml ()
+{
 
-$chessboard = $_SESSION["chessboard"];
-/*echo  '<root>
-    <piece type="' . $chessboard->_chessboard[1][2]->_kind . '" color="' . $chessboard->_chessboard[1][2]->_color . '"/>
-	<piece type="queen" color="black"/>
-	<piece type="pawn" color="white"/>
-    <piece type="pawn" color="black"/>
-	<piece type="queen" color="white"/>
-</root>';*/
+    $chessboard = $_SESSION["game"]->_chessboard;
 
-$i = 1;
-$j = 2;
-echo '<root>';
+    echo '<?xml version="1.0" encoding="UTF-8" ?>';
+    echo '<root>';
+    for ($i = 0; $i < 8; $i++)
+     {
+        for ($j = 0; $j < 8; $j++)
+        {
+            $color = "white";
+            if ($chessboard->_board[$i][$j]->_color == 1)
+            {
+                $color = "black";
+            }
+            echo  '<piece type="' . $chessboard->_board[$i][$j]->_kind . '" color="' . $color . '"/>';
+        }
+     }
+    echo "</root>";
+}
 
-for ($i = 0; $i < 8; $i++)
- {
-    for ($j = 0; $j < 8; $j++)
+function handle_action ($i, $j)
+{
+    $game = $_SESSION["game"];
+    $chessboard = $game->_chessboard;
+    echo '<?xml version="1.0" encoding="UTF-8" ?>';
+
+    //Si le joueur selectionne un de ses pions
+    if (($game->_player == $chessboard->_board[$i][$j]->_color) && ($chessboard->_board[$i][$j]->_kind != "none"))
     {
-     echo  '<piece type="' . $chessboard->_chessboard[$i][$j]->_kind . '" color="' . $chessboard->_chessboard[$i][$j]->_color . '"/>';
+      $same_square = false;
+      if ($game->_selection != null)
+      {
+       $same_square = ($game->_selection->_file == $i) && ($game->_selection->_rank == $j);
+      }
+      //Si la case n'est pas deja selectionnée
+      if (!$same_square)
+      {
+        echo '<root><initial i="' . $i . '" j="'. $j . '"/></root>';
+      }
+      else
+      {
+        echo '<root></root>';
+      }
+       $game->_selection = new Position ($i, $j);
     }
- }
-echo "</root>";
+    else
+    {
+        if ($game->_selection != null)
+        {
+
+            $move = new Move ($game->_selection, new Position($i, $j));
+            $valid = $chessboard->is_valid ($move);
+            if ($valid)
+            {
+                echo '<root><initial i="' . $game->_selection->_file . '" j="'. $game->_selection->_rank . '"/>';
+                echo '<final i="' . $i . '" j="'. $j . '"/></root>';
+                $game->_selection = null;
+
+                $chessboard->apply_move ($move);
+                $game->switch_player ();
+            }
+            else
+            {
+                echo '<root></root>';
+            }
+        }
+        else
+        {
+            echo '<root></root>';
+        }
+    }
+}
+
+
  
 ?>
