@@ -99,7 +99,7 @@ function handle_action ($i, $j)
                 echo '<final i="' . $i . '" j="'. $j . '"/></root>';
                 $game->_selection = null;
 
-                $chessboard->apply_move ($move);
+                $game->_chessboard->apply_move ($move);
                 $game->switch_player ();
             }
             else

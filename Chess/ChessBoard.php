@@ -33,18 +33,37 @@ class ChessBoard
 
    public function is_valid ($move)
    {
-
-       
+        $init_i = $move->_initial->_file;
+        $init_j = $move->_initial->_rank;
+        return ($this->_board[$init_i][$init_j]->is_valid ($move));
    }
 
    public function apply_move ($move)
    {
-        if ($this->is_littleRock ($move))
-        {
+      /* if ($move->_castling_flag)
+       {
             
-        }
+       }
+       else if ($move->_en_passant_flag)
+       {
+           
+       }
+       else if ($move->_promotion)
+       {
+           
+       }
+       else*/
+       {
+           $final_i = $move->_final->_file;
+           $final_j = $move->_final->_rank;
+           $init_i = $move->_initial->_file;
+           $init_j = $move->_initial->_rank;
+           //echo "init j = $init_j";
+           $this->_board[$final_i][$final_j] = $this->_board[$init_i][$init_j];
+           $default_piece = new None;
+           $this->_board[$init_i][$init_j] = $default_piece;
+       }
 
-       if ($)
    }
 
 /*private function*/
@@ -101,7 +120,6 @@ class ChessBoard
     $this->_board[Position::FELIX][Position::ACHT] = new Bishop (Color::BLACK);
     $this->_board[Position::GUSTAV][Position::ACHT] = new Knight (Color::BLACK);
     $this->_board[Position::HECTOR][Position::ACHT] = new Rook (Color::BLACK);
-
  }
 
 

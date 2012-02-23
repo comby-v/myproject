@@ -10,6 +10,18 @@ function Chessboard ()
     this._selection = new Object ();
     this._selection.i = -1;
     this._selection.j = -1;
+    this._player = "white";
+
+    this.switch_player = function ()
+    {
+        var player = "white";
+        if (this._player == "white")
+        {
+            player = "black";
+        }
+       this._player = player;
+       document.getElementById('player').innerHTML =  "Player : "+ player;
+    }
 }
 
 function selectSquare (context, mousePos, chessboard)
@@ -22,7 +34,7 @@ function selectSquare (context, mousePos, chessboard)
     {
         if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0))
         {
-            //alert (xhr.responseText);
+            alert (xhr.responseText);
             read_xml_response (chessboard, context, xhr.responseXML);
 
         }
@@ -30,40 +42,6 @@ function selectSquare (context, mousePos, chessboard)
     xhr.open ("GET", "Apply.php?function=handle_action&i=" + i + "&j=" + j, true);
     xhr.send(null);
 }
-/*function selectSquare (context, mousePos, chessboard)
-{
-   if (selection.i != -1)
-   {
-       if ((selection.i % 2 == 0 && selection.j % 2 == 0) || (selection.i % 2 != 0 && selection.j % 2 != 0))
-       {
-           context.fillStyle="white";
-       }
-       else
-       {
-           context.fillStyle="black";
-       }
-       context.fillRect(selection.i * 100 , selection.j * 100, 100, 100);
-       context.strokeStyle="black";
-       context.lineWidth = 5;
-       context.strokeRect (0, 0, 800, 800);
-       displayPiece (selection);
-   }
-   var i = Math.floor (mousePos.x / 100);
-   var j = Math.floor (mousePos.y / 100);
-   var x = i * 100;
-   var y = j * 100;
-   selection.i = i;
-   selection.j = j;
-   send_selection (selection);
-
-   context.fillStyle="#3366FF";
-   context.fillRect(x, y, 100, 100);
-   context.strokeStyle="black";
-   context.lineWidth = 1;
-   context.strokeRect (x, y, 100, 100);
-
-   return selection;
-}*/
 
 
 
@@ -73,20 +51,6 @@ function display_selection (chessboard, context, new_selection)
    //On reaffiche l'ancienne case
    if (selection.i != -1)
    {
-       /*if ((selection.i % 2 == 0 && selection.j % 2 == 0) || (selection.i % 2 != 0 && selection.j % 2 != 0))
-       {
-           context.fillStyle="white";
-       }
-       else
-       {
-           context.fillStyle="grey";
-       }
-       context.fillRect(selection.i * 100 , selection.j * 100, 100, 100);
-       context.strokeStyle="black";
-       context.lineWidth = 5;
-       context.strokeRect (0, 0, 800, 800);
-       var piece = chessboard._board[selection.i][selection.j];
-       display_piece (piece, selection.i, selection.j, context);*/
     clean_square (selection.i, selection.j, chessboard, context);
    }
    //on affiche la nouvelle case
@@ -99,7 +63,7 @@ function display_selection (chessboard, context, new_selection)
      display_piece (piece, new_selection.i, new_selection.j, context);
    context.strokeStyle="black";
    context.lineWidth = 1;
-   context.strokeRect (x, y, 100, 100);
+   context.strokeRect (x + 1, y + 1, 98, 98);
 
    displayContour(context);
 }
@@ -117,6 +81,26 @@ function display_piece (piece, i, j, context)
             context.drawImage(mon_image, i * 100, j * 100);
         }
    }
+}
+function apply_move (node_initial, node_final, chessboard, context)
+{
+    chessboard._selection = new Object ()
+    chessboard._selection.i = -1;
+    chessboard._selection.i = -1;
+
+    var init_i = node_initial[0].getAttribute("i");
+    var init_j = node_initial[0].getAttribute("j");
+    var final_i = node_final[0].getAttribute("i");
+    var final_j = node_final[0].getAttribute("j");
+
+    var piece_init = new Piece ("none", "color");
+    var piece_final = chessboard._board[init_i][init_j];
+    
+    chessboard._board[init_i][init_j] = piece_init;
+    chessboard._board[final_i][final_j] = piece_final;
+
+    clean_square (init_i, init_j, chessboard, context);
+    clean_square (final_i, final_j, chessboard, context);
 }
 
 function clean_square (i, j, chessboard, context)
@@ -198,22 +182,8 @@ function read_xml_response (chessboard, context, response)
         }
         else
         {
-            chessboard._selection = new Object ()
-            chessboard._selection.i = -1;
-            chessboard._selection.i = -1;
-
-            init_i = node_initial[0].getAttribute("i");
-            init_j = node_initial[0].getAttribute("j");
-            final_i = node_final[0].getAttribute("i");
-            final_j = node_final[0].getAttribute("j");
-
-            piece_init = new Piece ("none", "color");
-            piece_final = chessboard._board[init_i][init_j];
-            chessboard._board[init_i][init_j] = piece_init;
-            chessboard._board[final_i][final_j] = piece_final;
-
-            clean_square (init_i, init_j, chessboard, context);
-            clean_square (final_i, final_j, chessboard, context);
+            apply_move (node_initial, node_final, chessboard, context);
+            chessboard.switch_player ();
         }
     }
   /*  for (var i=0; i < nodes.length; i++)

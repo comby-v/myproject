@@ -6,6 +6,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="style.css" /> 
         <title> My Chess Board</title>
         <script > </script>
     </head>
@@ -34,10 +35,12 @@
         
 
         ?>
-        <canvas id="boardCanvas" width="800" height="800">
+        <canvas class="chessboard" id="boardCanvas" width="800" height="800">
             Message pour les navigateurs ne supportant pas encore canvas.
         </canvas>
-
+        <div class="info">
+            <h2 id="player"> Player : White</h2>
+        </div>
         <script src="Js/display.js" language="javascript" type="text/javascript">
         </script>
     </body>
