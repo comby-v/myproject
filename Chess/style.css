@@ -1,0 +1,12 @@
+.chessboard
+{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 200px;
+}
+
+.info
+{
+    display: inline-block;
+    vertical-align: middle;
+}
